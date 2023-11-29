@@ -6,7 +6,7 @@
 /*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 21:39:50 by amak              #+#    #+#             */
-/*   Updated: 2023/11/24 22:32:43 by amak             ###   ########.fr       */
+/*   Updated: 2023/11/28 22:07:48 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ static long	ft_atol(const char *str)
 
 /* The input time to die, eat and sleep is miliseconds and usleep function
 	is in microseconds, so we have to convert multiplying for 1000. */
-void parse_input(char **argv, t_table *table)
+void parse_input(t_table *table, char **argv)
 {
 	table->philo_nbr = ft_atol(argv[1]);
 	table->time_die = ft_atol(argv[2]) * 1000;

@@ -6,7 +6,7 @@
 #    By: amak <amak@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/24 02:26:01 by amak              #+#    #+#              #
-#    Updated: 2023/11/24 22:28:48 by amak             ###   ########.fr        #
+#    Updated: 2023/11/29 00:56:04 by amak             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,8 +24,11 @@ OBJ_PATH = obj/
 
 SRC_FILES = main.c \
 			utils.c \
-			parsing.c
-
+			parsing.c \
+			init.c \
+			safe_functions.c \
+			print_table.c
+			
 SRC = $(addprefix $(SRC_PATH), $(SRC_FILES))
 			
 OBJ = $(SRC:$(SRC_PATH)%.c=$(OBJ_PATH)%.o)
