@@ -2,86 +2,28 @@
 
 ### "I never thought philosophy would be so deadly"
 
-## Overview
+## Description
 
-### Here are the things you need to know if you want to succeed this assignment:
 
-- One or more philosophers sit at a round table.
-There is a large bowl of spaghetti in the middle of the table.
+The philosopher's dilemma, often referred to as the dining philosophers problem, is a classic synchronization and concurrency problem. It involves a scenario where five philosophers sit around a dining table, and each philosopher alternates between thinking and eating.The challenge arises from the need to avoid deadlock and resource contention, as philosophers must share a limited number of resources, such as forks. To prevent deadlock, a solution must be implemented to ensure that philosophers can only eat when they have acquired both the fork to their left and the fork to their right. Proper synchronization mechanisms, such as mutexes or semaphores, are crucial to address this dilemma and ensure the efficient utilization of resources.
 
-- The philosophers alternatively **eat**, **think**, or **sleep**.
-While they are eating, they are not thinking nor sleeping;
-while thinking, they are not eating nor sleeping;
-and, of course, while sleeping, they are not eating nor thinking.
+To see project's overview and global rules [HERE](OVERVIEW.md)
 
-- There are also forks on the table. There are **as many forks as philosophers**.
+### Project Details
 
-- Because serving and eating spaghetti with only one fork is very inconvenient, a
-philosopher takes their right and their left forks to eat, one in each hand.
 
-- When a philosopher has finished eating, they put their forks back on the table and
-start sleeping. Once awake, they start thinking again. The simulation stops when
-a philosopher dies of starvation.
+**Programing Language:** C
 
-- Every philosopher needs to eat and should never starve.
+**Input:**
+`./philo` `[number_of_philosophers]` `[time_to_die time_to_eat]` `[time_to_sleep]`
+`[number_of_times_each_philosopher_must_eat]`*(optional argument)*
 
-- Philosophers don’t speak with each other.
+**Approach**: 
+- Creating structures using mutexes for forks as `t_fork`, threads for each philosophers as `t_philo` and a structure for the table with all data used in the program as `t_table``.
+- Parsing the input and validating if inserted arguments are correct.
+- Initializing all data in the main structure `t_table`:
+	- the `table` contains `philos` and they have an order to grab the forks to their left and right.
+	- to prevent a deadlock situation, an order was implemented to grab forks for the philosophers: if the philosopher's position is ***odd***, he grabs the left fork first and then the right one. For an ***even*** position philosopher, it is the oposite; he grabs the right fork first the left fork.
+	- the forks are used as mutexes to prevent data races situation: because some philosophers (***threads***) shares the same fork (***resource***), when one fork is grabed, it is in use (***blocked***), so the other philosooher will wait until it is available (***unblocked***) to grab.
 
-- Philosophers don’t know if another philosopher is about to die.
-
-- No need to say that philosophers should avoid dying!
-
-## Global rules
-
-### You have to write a program that comply with the following rules:
-
-- Global variables are forbidden!
-
-- Your(s) program(s) should take the following arguments:
-`number_of_philosophers` `time_to_die time_to_eat` `time_to_sleep`
-`[number_of_times_each_philosopher_must_eat]`
-
-  1. `number_of_philosophers`: The number of philosophers and also the number
-of forks.
-
-  2. `time_to_die` (in milliseconds): If a philosopher didn’t start eating time_to_die
-milliseconds since the beginning of their last meal or the beginning of the simulation, they die.
-
-  3. `time_to_eat` (in milliseconds): The time it takes for a philosopher to eat.
-During that time, they will need to hold two forks.
-
-  4. `time_to_sleep` (in milliseconds): The time a philosopher will spend sleeping.
-
-  5. `number_of_times_each_philosopher_must_eat` (optional argument): If all
-philosophers have eaten at least number_of_times_each_philosopher_must_eat
-times, the simulation stops. If not specified, the simulation stops when a
-philosopher dies.
-
-- Each philosopher has a number ranging from 1 to `number_of_philosophers`.
-
-- Philosopher number 1 sits next to philosopher number `number_of_philosophers`.
-Any other philosopher number N sits between philosopher number `N` - 1 and philosopher number `N` + 1.
-
-- About the logs of your program:
-
-  Any state change of a philosopher must be formatted as follows:
-  ```
-		timestamp_in_ms X has taken a fork
-		timestamp_in_ms X is eating
-		timestamp_in_ms X is sleeping
-		timestamp_in_ms X is thinking
-		timestamp_in_ms X died
-  ```
-
-	*Replace* `timestamp_in_ms` *with the current timestamp in milliseconds
-	and X with the philosopher number.*
-
-- A displayed state message should not be mixed up with another message.
-
-- A message announcing a philosopher died should be displayed no more than 10 ms
-after the actual death of the philosopher.
-
-- Again, philosophers should avoid dying!
-
-	
-	#### ***`Your program must not have any data races.`***
+**Sources:***
