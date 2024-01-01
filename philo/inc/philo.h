@@ -6,7 +6,7 @@
 /*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 02:42:54 by amak              #+#    #+#             */
-/*   Updated: 2023/11/29 00:55:38 by amak             ###   ########.fr       */
+/*   Updated: 2023/12/31 23:47:33 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,25 @@ typedef enum e_option
 	DESTROY,
 	CREATE,
 	JOIN,
-	DETACH
+	DETACH,
 }			t_option;
+
+typedef enum e_time_code
+{
+	SECONDS,
+	MILISECONDS,
+	MICROSECONDS,
+}			t_time_code;
+
+typedef enum e_philo_status
+{
+	EATING,
+	SLEEPING,
+	THINKING,
+	TAKE_FIST_FORK,
+	TAKE_SECOND_FORK,
+	DIED,
+}			t_philo_status;
 
 /* STRUCTURES */
 
@@ -49,11 +66,12 @@ typedef struct s_philo
 {
 	int			id;
 	pthread_t	thread_id;
-	long 		meals;
+	long 		nr_meals;
 	int			full;
 	long		last_meal_time;
 	t_fork		*first_fork;
 	t_fork		*second_fork;
+	t_mutex		mutex;
 	t_table		*table;
 } 				t_philo;
 
@@ -66,6 +84,9 @@ typedef struct s_table
 	long	nbr_meals;
 	long	start_simulation;
 	int		end_simulation;
+	int		all_threads_ready;
+	t_mutex	table_mutex;
+	t_mutex	write_mutex;
 	t_fork	*forks;
 	t_philo	*philos;
 }		t_table;
@@ -75,6 +96,8 @@ typedef struct s_table
 
 /* UTILS FUNCTIONS */
 void	error_exit(const char *error_msg);
+long	gettime(t_time_code time_code);
+void	ft_sleep(long usec, t_table *table);
 
 /* PARSING FUNCTIONS */
 void 	parse_input(t_table *table, char **argv);
@@ -85,11 +108,26 @@ void	safe_mutex_handle(t_mutex *mutex, t_option option);
 void	safe_thread_handle(pthread_t *thread, void *(foo)(void *), void *data,
 		t_option option);
 
+/* SYNCHRO UTILS */
+void	wait_all_threads(t_table *table);
+
+/* GETTERS AND SETTERS FUNCTIONS*/
+void	set_bool(t_mutex *mutex, int *dest, int value);
+int		get_bool(t_mutex *mutex, int *value);
+void	set_long(t_mutex *mutex, long *dest, long value);
+long	get_long(t_mutex *mutex, long *value);
+int		simulation_finished(t_table *table);
+
 /* INIT FUNCTIONS */
 void 	table_init(t_table *table);
 
+/* WRITE FUNCTIONS */
+void	write_status(t_philo_status status, t_philo *philo);
 
 /* PRINT TABLE FUNCTIONS */
 void	print_table(t_table *table);
+
+/* SIMULATIONS FUNCTIONS */
+void	dinner_start(t_table *table);
 
 #endif

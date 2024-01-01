@@ -6,7 +6,7 @@
 /*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 22:19:22 by amak              #+#    #+#             */
-/*   Updated: 2023/11/29 00:49:23 by amak             ###   ########.fr       */
+/*   Updated: 2024/01/01 20:23:52 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ static void	assign_forks(t_philo *philo, t_fork *forks, int philo_position)
 	int	philo_nbr;
 
 	philo_nbr = philo->table->philo_nbr;
-	
 	if (philo->id % 2 != 0)
 	{
 		philo->first_fork = &forks[(philo_position + 1) % philo_nbr];
@@ -36,17 +35,19 @@ static void	assign_forks(t_philo *philo, t_fork *forks, int philo_position)
 
 static void	philo_init(t_table *table)
 {
-	int	i;
+	int		i;
+	t_philo	*philo;
 
-	i = 0;
-	while(i < table->philo_nbr)
+	i = -1;
+	while (++i < table->philo_nbr)
 	{
-		table->philos[i].id = i + 1;
-		table->philos[i].meals = 0;
-		table->philos[i].full = 0;
-		table->philos[i].table = table;
-		assign_forks(table->philos, table->forks, i);
-		i++;
+		philo = table->philos + i;
+		philo->id = i + 1;
+		philo->full = 0;
+		philo->nr_meals = 0;
+		safe_mutex_handle(&philo->mutex, INIT);
+		philo->table = table;
+		assign_forks(philo, table->forks, i);
 	}
 }
 
@@ -56,7 +57,10 @@ void 	table_init(t_table *table)
 	
 	i = 0;
 	table->end_simulation = 0;
+	table->all_threads_ready = 0;
 	table->philos = safe_malloc(table->philo_nbr * sizeof(t_philo));
+	safe_mutex_handle(&table->table_mutex, INIT);
+	safe_mutex_handle(&table->write_mutex, INIT);
 	table->forks = safe_malloc(table->philo_nbr * sizeof(t_fork));
 	while (i < table->philo_nbr)
 	{
@@ -65,5 +69,4 @@ void 	table_init(t_table *table)
 		i++;
 	}
 	philo_init(table);
-	
 }

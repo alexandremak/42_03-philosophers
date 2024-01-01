@@ -1,22 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_table.c                                      :+:      :+:    :+:   */
+/*   synchro_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/29 00:50:10 by amak              #+#    #+#             */
-/*   Updated: 2024/01/01 20:33:50 by amak             ###   ########.fr       */
+/*   Created: 2023/12/31 22:04:02 by amak              #+#    #+#             */
+/*   Updated: 2023/12/31 22:06:17 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-void	print_table(t_table *table)
+void	wait_all_threads(t_table *table)
 {
-	printf("\nNumber of philosophers: %ld\n", table->philo_nbr);
-	printf("Time to die: %ld ms\n", table->time_die / 1000);
-	printf("Time to eat: %ld ms\n", table->time_eat / 1000);
-	printf("Time to sleep: %ld ms\n", table->time_sleep / 1000);
-	printf("Number of meals must eat: %ld\n\n", table->nbr_meals);
+	while (!get_bool(&table->table_mutex, &table->all_threads_ready))
+		;
 }
