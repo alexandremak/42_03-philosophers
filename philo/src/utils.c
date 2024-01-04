@@ -6,7 +6,7 @@
 /*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 21:30:35 by amak              #+#    #+#             */
-/*   Updated: 2024/01/01 01:24:56 by amak             ###   ########.fr       */
+/*   Updated: 2024/01/02 21:38:37 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,20 @@ void	ft_sleep(long usec, t_table *table)
 			while ((gettime(MICROSECONDS) - start) < usec)
 				;
 	}
+}
+void	clean(t_table *table)
+{
+	t_philo	*philo;
+	int		i;
+	
+	i = -1;
+	while (++i < table->philo_nbr)
+	{
+		philo = table->philos + i;
+		safe_mutex_handle(&philo->mutex, DESTROY);
+	}
+	safe_mutex_handle(&table->table_mutex, DESTROY);
+	safe_mutex_handle(&table->write_mutex, DESTROY);
+	free(table->forks);
+	free(table->philos);
 }

@@ -6,7 +6,7 @@
 /*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 02:38:38 by amak              #+#    #+#             */
-/*   Updated: 2024/01/01 20:38:41 by amak             ###   ########.fr       */
+/*   Updated: 2024/01/02 22:27:03 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,6 @@ int	main(int argc, char **argv)
 		print_table(&table);
 		table_init(&table);
 		dinner_start(&table);
-		// free_all(&table);
+		clean(&table);
 	}
 }

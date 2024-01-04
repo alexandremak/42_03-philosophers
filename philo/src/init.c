@@ -6,7 +6,7 @@
 /*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 22:19:22 by amak              #+#    #+#             */
-/*   Updated: 2024/01/01 20:23:52 by amak             ###   ########.fr       */
+/*   Updated: 2024/01/02 20:02:30 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void 	table_init(t_table *table)
 	i = 0;
 	table->end_simulation = 0;
 	table->all_threads_ready = 0;
+	table->nbr_threads_running = 0;
 	table->philos = safe_malloc(table->philo_nbr * sizeof(t_philo));
 	safe_mutex_handle(&table->table_mutex, INIT);
 	safe_mutex_handle(&table->write_mutex, INIT);

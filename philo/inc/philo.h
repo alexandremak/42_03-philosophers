@@ -6,7 +6,7 @@
 /*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 02:42:54 by amak              #+#    #+#             */
-/*   Updated: 2023/12/31 23:47:33 by amak             ###   ########.fr       */
+/*   Updated: 2024/01/04 20:57:36 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,19 +77,21 @@ typedef struct s_philo
 
 typedef struct s_table
 {
-	long	philo_nbr;
-	long	time_die;
-	long	time_eat;
-	long	time_sleep;
-	long	nbr_meals;
-	long	start_simulation;
-	int		end_simulation;
-	int		all_threads_ready;
-	t_mutex	table_mutex;
-	t_mutex	write_mutex;
-	t_fork	*forks;
-	t_philo	*philos;
-}		t_table;
+	long		philo_nbr;
+	long		time_die;
+	long		time_eat;
+	long		time_sleep;
+	long		nbr_meals;
+	long		start_simulation;
+	int			end_simulation;
+	int			all_threads_ready;
+	long		nbr_threads_running;
+	t_mutex		table_mutex;
+	t_mutex		write_mutex;
+	t_fork		*forks;
+	t_philo		*philos;
+	pthread_t	monitor;
+}				t_table;
 
 /* MAIN FUNCTIONS*/
 
@@ -98,6 +100,7 @@ typedef struct s_table
 void	error_exit(const char *error_msg);
 long	gettime(t_time_code time_code);
 void	ft_sleep(long usec, t_table *table);
+void	clean(t_table *table);
 
 /* PARSING FUNCTIONS */
 void 	parse_input(t_table *table, char **argv);
@@ -110,6 +113,8 @@ void	safe_thread_handle(pthread_t *thread, void *(foo)(void *), void *data,
 
 /* SYNCHRO UTILS */
 void	wait_all_threads(t_table *table);
+int		all_threads_running(t_mutex *mutex, long *threads, long philo_nbr);
+void	increase_unit(t_mutex *mutex, long *value);
 
 /* GETTERS AND SETTERS FUNCTIONS*/
 void	set_bool(t_mutex *mutex, int *dest, int value);
@@ -126,6 +131,9 @@ void	write_status(t_philo_status status, t_philo *philo);
 
 /* PRINT TABLE FUNCTIONS */
 void	print_table(t_table *table);
+
+/* MONITOR FUNCTIONS */
+void	*monitor_dinner(void *data);
 
 /* SIMULATIONS FUNCTIONS */
 void	dinner_start(t_table *table);
