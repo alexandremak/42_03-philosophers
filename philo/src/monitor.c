@@ -6,7 +6,7 @@
 /*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 21:21:22 by amak              #+#    #+#             */
-/*   Updated: 2024/01/17 21:50:50 by amak             ###   ########.fr       */
+/*   Updated: 2024/01/20 16:22:15 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	*monitor_dinner(void *data)
 	table = (t_table *)data;
 	while (!all_threads_running(&table->read_mutex,
 			&table->nbr_threads_running, table->nbr_philos))
-		;
+		usleep(200);
 	while (!dinner_ended(table))
 	{
 		i = -1;

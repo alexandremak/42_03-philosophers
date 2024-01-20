@@ -6,7 +6,7 @@
 /*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:28:12 by amak              #+#    #+#             */
-/*   Updated: 2024/01/20 14:33:35 by amak             ###   ########.fr       */
+/*   Updated: 2024/01/20 16:46:24 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,14 @@ void	ft_sleep(long useconds)
 			usleep(remaining / 2);
 		else
 			while ((gettime() - start) < useconds)
-				;
+				usleep(200);
 	}
 }
+
 void	clean_table(t_table *table)
 {
 	t_philo	*philo;
-	t_fork *fork;
+	t_fork	*fork;
 	int		i;
 
 	i = 0;

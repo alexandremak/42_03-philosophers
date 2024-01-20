@@ -6,7 +6,7 @@
 /*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:56:44 by amak              #+#    #+#             */
-/*   Updated: 2024/01/19 22:39:27 by amak             ###   ########.fr       */
+/*   Updated: 2024/01/20 16:59:13 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static void	eat(t_philo *philo)
 	set_long(&philo->mutex, &philo->time_last_meal, gettime());
 	philo->meals_ate++;
 	write_status(philo, EATING);
+	printf("Philo ID: %d AQUI!\n", philo->id);
 	ft_sleep(philo->table->time_eat);
 	if (philo->table->nbr_meals > 0 && 
 		philo->meals_ate == philo->table->nbr_meals)
@@ -65,9 +66,14 @@ void	*routine(void *data)
 	wait_all_threads(philo->table);
 	set_long(&philo->mutex, &philo->time_last_meal, gettime());
 	int_increase(&philo->table->read_mutex, &philo->table->nbr_threads_running);
-	while (!dinner_ended(philo->table) && !get_int(&philo->mutex, &philo->full))
+	while (!dinner_ended(philo->table))
 	{
 		eat(philo);
+		if (get_int(&philo->mutex, &philo->full))
+		{
+			write_status(philo, THINKING);	
+			break;
+		}
 		write_status(philo, SLEEPING);
 		ft_sleep(philo->table->time_sleep);
 		think(philo);
