@@ -5,22 +5,21 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/02 19:56:07 by amak              #+#    #+#             */
-/*   Updated: 2024/01/02 21:14:37 by amak             ###   ########.fr       */
+/*   Created: 2024/01/17 21:21:22 by amak              #+#    #+#             */
+/*   Updated: 2024/01/17 21:50:50 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-static int	philo_dead(t_philo *philo)
+int	philo_dead(t_philo *philo)
 {
 	long	elapsed;
 	long	time_to_die;
 
-	elapsed = gettime(MILISECONDS) - get_long(&philo->mutex, 
-				&philo->last_meal_time);
-	time_to_die = philo->table->time_die / 1000;
-	if (get_bool(&philo->mutex, &philo->full))
+	elapsed = gettime() - get_long(&philo->mutex, &philo->time_last_meal);
+	time_to_die = philo->table->time_die;
+	if (get_int(&philo->mutex, &philo->full))
 		return (0);
 	if (elapsed > time_to_die)
 		return (1);
@@ -29,24 +28,24 @@ static int	philo_dead(t_philo *philo)
 
 void	*monitor_dinner(void *data)
 {
-	t_table 	*table;
-	int			i;
+	t_table	*table;
+	int		i;
 
 	table = (t_table *)data;
-	while (!all_threads_running(&table->table_mutex, 
-			&table->nbr_threads_running, table->philo_nbr))
+	while (!all_threads_running(&table->read_mutex,
+			&table->nbr_threads_running, table->nbr_philos))
 		;
-	while (!simulation_finished(table))
+	while (!dinner_ended(table))
 	{
 		i = -1;
-		while (++i < table->philo_nbr && !simulation_finished(table))
+		while (++i < table->nbr_philos && !dinner_ended(table))
 		{
 			if (philo_dead(table->philos + i))
 			{
-				set_bool(&table->table_mutex, &table->end_simulation, 1);
-				write_status(DIED, table->philos + i);
+				set_int(&table->read_mutex, &table->end_dinner, 1);
+				write_status(table->philos + i, DIED);
 			}
 		}
 	}
-	return NULL;
+	return (NULL);
 }

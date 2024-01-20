@@ -5,37 +5,35 @@
 #                                                     +:+ +:+         +:+      #
 #    By: amak <amak@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/10/24 02:26:01 by amak              #+#    #+#              #
-#    Updated: 2024/01/04 22:31:48 by amak             ###   ########.fr        #
+#    Created: 2024/01/15 18:44:03 by amak              #+#    #+#              #
+#    Updated: 2024/01/19 22:05:53 by amak             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
 
 NAME = philo
 
 CC = cc -g
 
-CFLAGS = -Wall -Wextra -Werror -pthread
+CFLAGS = -Wall -Wextra -Werror -pthread #-fsanitize=thread
 
 INC = -I ./inc/
 
 SRC_PATH = src/
+
 OBJ_PATH = obj/
 
 SRC_FILES = main.c \
+			check_parse.c \
+			table.c \
 			utils.c \
-			parsing.c \
-			init.c \
-			safe_functions.c \
-			getters_setters.c \
-			print_table.c \
-			synchro_utils.c \
+			get_set.c \
+			synchro.c \
 			write.c \
-			simulation.c \
-			monitor.c
-			
+			monitor.c \
+			dinner.c
+
 SRC = $(addprefix $(SRC_PATH), $(SRC_FILES))
-			
+
 OBJ = $(SRC:$(SRC_PATH)%.c=$(OBJ_PATH)%.o)
 
 
@@ -49,15 +47,15 @@ $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 	@echo Object files created!
 	@echo Executable file created!
-	
+
 clean:
 	@rm -rf $(OBJ_PATH)
-	@echo Deleted object files!
+	@echo Deleted objected files!
 
 fclean: clean
-		@rm -f $(NAME)
-		@echo Deleted executable!
-
+	@rm -f $(NAME)
+	@echo Deleted executable!
+	
 re: fclean all
 
 .PHONY: all clean fclean re

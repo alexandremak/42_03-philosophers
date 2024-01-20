@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/24 02:38:38 by amak              #+#    #+#             */
-/*   Updated: 2024/01/02 22:27:03 by amak             ###   ########.fr       */
+/*   Created: 2024/01/15 18:43:52 by amak              #+#    #+#             */
+/*   Updated: 2024/01/19 21:50:18 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,24 @@
 int	main(int argc, char **argv)
 {
 	t_table	table;
-	
+
 	if (argc < 5 || argc > 6)
-		error_exit("Invalid number of arguments!\n");
-	else
 	{
-		parse_input(&table, argv);
-		print_table(&table);
-		table_init(&table);
-		dinner_start(&table);
-		clean(&table);
+		printf("Invalid number of arguments!\n");
+		return (1);
 	}
+	if (!valid_input(argc, argv))
+	{
+		printf("Arguments with invalid values inserted!\n");
+		return (1);
+	}
+	parse_input(&table, argv);
+	if (!init_table(&table))
+	{
+		printf("Error initializing table values!\n");
+		return (1);
+	}
+	init_dinner(&table);
+	clean_table(&table);
+	return (0);
 }

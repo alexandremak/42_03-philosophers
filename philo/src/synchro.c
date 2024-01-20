@@ -1,22 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_table.c                                      :+:      :+:    :+:   */
+/*   synchro.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/29 00:50:10 by amak              #+#    #+#             */
-/*   Updated: 2024/01/01 20:33:50 by amak             ###   ########.fr       */
+/*   Created: 2024/01/17 19:40:41 by amak              #+#    #+#             */
+/*   Updated: 2024/01/17 21:52:25 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-void	print_table(t_table *table)
+void	wait_all_threads(t_table *table)
 {
-	printf("\nNumber of philosophers: %ld\n", table->philo_nbr);
-	printf("Time to die: %ld ms\n", table->time_die / 1000);
-	printf("Time to eat: %ld ms\n", table->time_eat / 1000);
-	printf("Time to sleep: %ld ms\n", table->time_sleep / 1000);
-	printf("Number of meals must eat: %ld\n\n", table->nbr_meals);
+	while (!get_int(&table->read_mutex, &table->all_threads_ready))
+		;
+}
+
+int	all_threads_running(t_mutex *mutex, int *threads, int philos_nbr)
+{
+	int	res;
+
+	res = 0;
+	pthread_mutex_lock(mutex);
+	if (*threads == philos_nbr)
+		res = 1;
+	pthread_mutex_unlock(mutex);
+	return (res);
+}
+
+int	dinner_ended(t_table *table)
+{
+	return (get_int(&table->read_mutex, &table->end_dinner));
 }

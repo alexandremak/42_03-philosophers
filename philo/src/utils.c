@@ -5,70 +5,58 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/24 21:30:35 by amak              #+#    #+#             */
-/*   Updated: 2024/01/02 21:38:37 by amak             ###   ########.fr       */
+/*   Created: 2024/01/17 18:28:12 by amak              #+#    #+#             */
+/*   Updated: 2024/01/20 14:33:35 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-void	error_exit(const char *error_msg)
+long	gettime(void)
 {
-	printf("%s", error_msg);
-	exit(EXIT_FAILURE);
+	struct timeval	time;
+
+	gettimeofday(&time, NULL);
+	return ((time.tv_sec * 1000000) + time.tv_usec);
 }
 
-/* Microseconds from Midnight (0 hour), January 1, 1970 */
-long	gettime(t_time_code time_code)
-{
-	struct timeval	tv;
-	
-	if (gettimeofday(&tv, NULL))
-		error_exit("Function getitmeofday() failed.");
-	if (time_code == SECONDS)
-		return (tv.tv_sec + (tv.tv_usec / 1000000));
-	else if (time_code == MILISECONDS)
-		return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
-	else if (time_code == MICROSECONDS)
-		return ((tv.tv_sec * 1000000) + (tv.tv_usec));
-	else
-		error_exit("Wrong input to gettime function.");
-	return (0);
-}
-
-void	ft_sleep(long usec, t_table *table)
+void	ft_sleep(long useconds)
 {
 	long	start;
 	long	elapsed;
-	long	rem;
+	long	remaining;
 
-	start = gettime(MICROSECONDS);
-	while (gettime(MICROSECONDS) - start < usec)
+	elapsed = 0;
+	remaining = 0;
+	start = gettime();
+	while ((gettime() - start) < useconds)
 	{
-		if (simulation_finished(table))
-			break;
-		elapsed = gettime(MICROSECONDS) - start;
-		rem = usec - elapsed;
-		if (rem > 1000)
-			usleep(rem / 2);
+		elapsed = gettime() - start;
+		remaining = useconds - elapsed;
+		if (remaining > 1000)
+			usleep(remaining / 2);
 		else
-			while ((gettime(MICROSECONDS) - start) < usec)
+			while ((gettime() - start) < useconds)
 				;
 	}
 }
-void	clean(t_table *table)
+void	clean_table(t_table *table)
 {
 	t_philo	*philo;
+	t_fork *fork;
 	int		i;
-	
-	i = -1;
-	while (++i < table->philo_nbr)
+
+	i = 0;
+	while (i < table->nbr_philos)
 	{
 		philo = table->philos + i;
-		safe_mutex_handle(&philo->mutex, DESTROY);
+		fork = table->forks + i;
+		pthread_mutex_destroy(&philo->mutex);
+		pthread_mutex_destroy(&fork->mutex);
+		i++;
 	}
-	safe_mutex_handle(&table->table_mutex, DESTROY);
-	safe_mutex_handle(&table->write_mutex, DESTROY);
+	pthread_mutex_destroy(&table->read_mutex);
+	pthread_mutex_destroy(&table->write_mutex);
 	free(table->forks);
 	free(table->philos);
 }
