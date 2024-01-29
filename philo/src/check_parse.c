@@ -6,7 +6,7 @@
 /*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 19:03:43 by amak              #+#    #+#             */
-/*   Updated: 2024/01/20 16:55:07 by amak             ###   ########.fr       */
+/*   Updated: 2024/01/23 18:31:49 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ static	int	number_ok(char *str)
 	return (1);
 }
 
+/*	The string contect is validated before so the conversion is always a
+	positive number */
 static long	ft_atol_positive(char *str)
 {
 	long	res;
@@ -71,6 +73,9 @@ int	valid_input(int argc, char **argv)
 	return (1);
 }
 
+/*	The time is converted to microseconds so is multiplied for 1000. 
+	The value -1 is used as a flag value when the number of meals is not
+	inserted */
 void	parse_input(t_table *table, char **argv)
 {
 	table->nbr_philos = ft_atol_positive(argv[1]);

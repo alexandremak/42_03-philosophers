@@ -6,7 +6,7 @@
 /*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 21:21:22 by amak              #+#    #+#             */
-/*   Updated: 2024/01/20 16:22:15 by amak             ###   ########.fr       */
+/*   Updated: 2024/01/22 21:21:31 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ int	philo_dead(t_philo *philo)
 	long	elapsed;
 	long	time_to_die;
 
-	elapsed = gettime() - get_long(&philo->mutex, &philo->time_last_meal);
-	time_to_die = philo->table->time_die;
 	if (get_int(&philo->mutex, &philo->full))
 		return (0);
+	elapsed = gettime() - get_long(&philo->mutex, &philo->time_last_meal);
+	time_to_die = philo->table->time_die;
 	if (elapsed > time_to_die)
 		return (1);
 	return (0);
@@ -34,7 +34,7 @@ void	*monitor_dinner(void *data)
 	table = (t_table *)data;
 	while (!all_threads_running(&table->read_mutex,
 			&table->nbr_threads_running, table->nbr_philos))
-		usleep(200);
+		usleep(100);
 	while (!dinner_ended(table))
 	{
 		i = -1;

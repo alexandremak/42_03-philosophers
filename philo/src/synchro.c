@@ -6,7 +6,7 @@
 /*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 19:40:41 by amak              #+#    #+#             */
-/*   Updated: 2024/01/20 16:22:24 by amak             ###   ########.fr       */
+/*   Updated: 2024/01/22 21:21:39 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	wait_all_threads(t_table *table)
 {
 	while (!get_int(&table->read_mutex, &table->all_threads_ready))
-		usleep(200);
+		usleep(100);
 }
 
 int	all_threads_running(t_mutex *mutex, int *threads, int philos_nbr)

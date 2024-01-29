@@ -6,7 +6,7 @@
 /*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:28:12 by amak              #+#    #+#             */
-/*   Updated: 2024/01/20 16:46:24 by amak             ###   ########.fr       */
+/*   Updated: 2024/01/23 18:56:19 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,24 +20,16 @@ long	gettime(void)
 	return ((time.tv_sec * 1000000) + time.tv_usec);
 }
 
-void	ft_sleep(long useconds)
+void	ft_sleep(long useconds, t_table *table)
 {
 	long	start;
-	long	elapsed;
-	long	remaining;
 
-	elapsed = 0;
-	remaining = 0;
 	start = gettime();
 	while ((gettime() - start) < useconds)
 	{
-		elapsed = gettime() - start;
-		remaining = useconds - elapsed;
-		if (remaining > 1000)
-			usleep(remaining / 2);
-		else
-			while ((gettime() - start) < useconds)
-				usleep(200);
+		if (dinner_ended(table))
+			break ;
+		usleep(100);
 	}
 }
 

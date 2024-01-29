@@ -6,7 +6,7 @@
 #    By: amak <amak@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/15 18:44:03 by amak              #+#    #+#              #
-#    Updated: 2024/01/20 17:03:16 by amak             ###   ########.fr        #
+#    Updated: 2024/01/23 18:57:17 by amak             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,7 @@ all: $(NAME)
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 	@mkdir -p $(OBJ_PATH)
-	@$(CC) $(CFLAGS) $(INC) -c $< -o $@
+	$(CC) $(CFLAGS) $(INC) -c $< -o $@
 
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)

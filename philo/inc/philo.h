@@ -6,7 +6,7 @@
 /*   By: amak <amak@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 18:40:33 by amak              #+#    #+#             */
-/*   Updated: 2024/01/19 20:35:34 by amak             ###   ########.fr       */
+/*   Updated: 2024/01/23 18:55:05 by amak             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int		init_table(t_table *table);
 
 /* UTILS FUNCTIONS */
 long	gettime(void);
-void	ft_sleep(long useconds);
+void	ft_sleep(long useconds, t_table *table);
 void	clean_table(t_table *table);
 
 /* GETTERS AND SETTES FUNCTIONS */
